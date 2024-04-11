@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/11 01:58:57 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/11 18:26:46 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	ft_exit(char *error_message)
 {
 	if (error_message)
-		printf("%s%s%s\n", BLUE, error_message, END_COLOR);
+		printf("%s%s%s\n", BOLD_BLUE, error_message, END_COLOR);
 	exit(EXIT_SUCCESS);
 }
 
@@ -33,6 +33,8 @@ static void	ft_check_args(int ac, char **av, int *numeric_args)
 	{
 		num = ft_atoi(av[ac]);
 		copy = ft_itoa(num);
+		if (!copy)
+			ft_exit("ft_itoa: malloc failure");
 		offset = false;
 		if (av[ac][0] == '+' || av[ac][0] == '-')
 			offset = true;
