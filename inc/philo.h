@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/11 18:24:37 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/13 16:37:56 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,19 @@
 # define BOLD_BLUE "\033[1;34m"
 # define END_COLOR "\033[0m"
 
+# define INVALID_ARGS "Arguments must be positive decimal integers"
+# define MALLOC_FAIL "malloc failure"
 # define USAGE "Usage: ./philo <number_of_philosophers> <time_to_die> \
 <time_to_eat> <time_to_sleep> \
 [optional]<number_of_times_each_philosopher_must_eat>"
-# define INVALID_ARGS "Arguments must be positive decimal integers"
+
+typedef enum e_args
+{
+	NUMBER_OF_PHILOSOPHERS,
+	TIME_TO_DIE,
+	TIME_TO_EAT,
+	TIME_TO_SLEEP,
+	NUMBER_OF_MEALS
+}	t_args;
 
 #endif

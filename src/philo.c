@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/11 18:26:46 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/13 16:42:52 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ static void	ft_check_args(int ac, char **av, int *numeric_args)
 		num = ft_atoi(av[ac]);
 		copy = ft_itoa(num);
 		if (!copy)
-			ft_exit("ft_itoa: malloc failure");
+			ft_exit(MALLOC_FAIL);
 		offset = false;
 		if (av[ac][0] == '+' || av[ac][0] == '-')
 			offset = true;
 		result = ft_strcmp(av[ac] + offset, copy);
 		free(copy);
-		if (result != 0)
+		if (result != 0/* || num == 0*/)
 			ft_exit(INVALID_ARGS);
 		numeric_args[ac] = num;
 	}
@@ -48,9 +48,14 @@ static void	ft_check_args(int ac, char **av, int *numeric_args)
 
 int	main(int ac, char **av)
 {
-	int	numeric_args[6];
+	int			numeric_args[6];
+	pthread_t	*philosophers;
 
+	printf("%s\n", __func__);
 	ft_check_args(ac, av, numeric_args);
+	philosophers = (pthread_t *)malloc(numeric_args[NUMBER_OF_PHILOSOPHERS] * sizeof(pthread_t));
+	if (!philosophers)
+		ft_exit(MALLOC_FAIL);
 	(void)av;
 	return (0);
 }
