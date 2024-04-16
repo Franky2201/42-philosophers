@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/13 16:50:11 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/16 16:50:39 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,20 @@ static void	ft_check_args(int ac, char **av, int *numeric_args)
 
 int	main(int ac, char **av)
 {
-	int			numeric_args[6];
-	pthread_t	*philosophers;
+	int				i;
+	int				numeric_args[6];
+	t_philosopher	*philosophers;
 
 	ft_check_args(ac, av, numeric_args);
-	philosophers = (pthread_t *)malloc(numeric_args[NUMBER_OF_PHILOSOPHERS] * sizeof(pthread_t));
+	philosophers = (t_philosopher *)malloc(numeric_args[NUMBER_OF_PHILOSOPHERS] * sizeof(t_philosopher));
 	if (!philosophers)
 		ft_exit((char *)__func__, MALLOC_FAIL);
-	(void)av;
+	i = 0;
+	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
+	{
+		//pthread_mutex_init(&philosophers->lock, NULL);
+		//pthread_create();
+		i++;
+	}
 	return (0);
 }
