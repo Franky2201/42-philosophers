@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/17 20:02:26 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/18 15:33:33 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,12 @@ typedef enum e_args
 
 typedef struct s_philosopher
 {
-	int				i;
-	pthread_mutex_t	lock;
-	pthread_mutex_t	*master_lock;
-	pthread_mutex_t	*next_lock;
-	pthread_t		thread;
+	pthread_mutex_t			lock;
+	pthread_mutex_t			*master_lock;
+	pthread_mutex_t			*next_lock;
+	pthread_t				thread;
+	size_t					philosopher_count;
+	struct s_philosopher	*to_free;
 }	t_philosopher;
 
 void	ft_safe_thread_create(pthread_t *thread, (void *)(*routine)(void *), t_philosopher *philosophers, int index);
