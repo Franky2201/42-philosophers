@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/04/11 17:29:34 by gde-win          ###   ########.fr        #
+#    Updated: 2024/04/19 14:51:51 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ CC :=			cc
 CFLAGS :=		-Wall -Wextra -Werror
 ASAN_FLAGS :=	-fsanitize=address -g
 INC_FILES :=	-I/inc
-FUNCTIONS :=	philo.c
+FUNCTIONS :=	philo.c \
+				safe_mutexes.c \
+				safe_threads.c
 LIBFT :=		libft
 LLIBFT :=		$(addsuffix /libft.a, $(LIBFT))
 SRCS_DIR :=		src

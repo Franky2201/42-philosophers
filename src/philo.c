@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/18 15:32:03 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/19 14:51:37 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	ft_free(t_philosopher *to_free)
 	i = 0;
 	while (i < to_free->philosopher_count)
 	{
-		ft_safe_mutex_destroy(to_free[i].lock, NULL);
+		ft_safe_mutex_destroy(&to_free[i].lock, NULL);
 		i++;
 	}
 	ft_safe_mutex_destroy(to_free->master_lock, NULL);
@@ -46,7 +46,7 @@ void	ft_exit(char *caller_name, char *error_message, t_philosopher *to_free)
 		ft_free(to_free);
 	if (error_message)
 		printf("%s%s: %s%s\n", BOLD_BLUE, caller_name, error_message, END_COLOR);
-	exit(EXIT_SUCCESS);
+	exit(EXIT_FAILURE);
 }
 
 static void	ft_check_args(int ac, char **av, int *numeric_args)
@@ -111,7 +111,7 @@ int	main(int ac, char **av)
 	i = 0;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
-		ft_safe_thread_create(&philosophers[i].thread, &ft_routine, philosophers[i]);
+		ft_safe_thread_create(&philosophers[i].thread, &ft_routine, &philosophers[i]);
 		i++;
 	}
 	i = 0;
@@ -120,16 +120,14 @@ int	main(int ac, char **av)
 		ft_safe_thread_join(philosophers[i].thread, philosophers);
 		i++;
 	}
-	pthread_mutex_destroy(&master_lock);
-	ft_safe_mutex_destroy(&master_lock, philosophers);
-	memset(&master_lock, 0, sizeof(pthread_mutex_t));
+/*	ft_safe_mutex_destroy(&master_lock, philosophers);
 	i = numeric_args[NUMBER_OF_PHILOSOPHERS];
 	while (i > 0)
 	{
 		ft_safe_mutex_destroy(&philosophers[i - 1].lock, philosophers);
-		memset(&philosophers[i - 1].lock, 0, sizeof(pthread_mutex_t));
 		i--;
 	}
 	free(philosophers);
+*/	ft_free(philosophers);
 	return (0);
 }

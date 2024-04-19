@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/18 15:33:33 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/19 14:52:06 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../libft/inc/libft.h"
 # include <pthread.h>
 # include <stdio.h>
+# include <string.h>
 
 # define BOLD_BLUE "\033[1;34m"
 # define END_COLOR "\033[0m"
@@ -51,11 +52,13 @@ typedef struct s_philosopher
 	struct s_philosopher	*to_free;
 }	t_philosopher;
 
-void	ft_safe_thread_create(pthread_t *thread, (void *)(*routine)(void *), t_philosopher *philosophers, int index);
-void	ft_safe_thread_join(pthread_t *thread, t_philosophers *philosophers);
-void	ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *philosophers);
-void	ft_safe_mutex_init(pthread_mutex_t *lock, t_philosopher *philosophers);
-void	ft_safe_mutex_lock(pthread_mutex_t *lock, t_philosopher *philosophers);
-void	ft_safe_mutex_unlock(pthread_mutex_t *lock, t_philosopher *philosophers);
+void	ft_exit(char *caller_name, char *error_message, t_philosopher *to_free);
+void	*ft_routine(void *data);
+void	ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
+void	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free);
+void	ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free);
+void	ft_safe_mutex_init(pthread_mutex_t *lock, t_philosopher *to_free);
+void	ft_safe_mutex_lock(pthread_mutex_t *lock, t_philosopher *to_free);
+void	ft_safe_mutex_unlock(pthread_mutex_t *lock, t_philosopher *to_free);
 
 #endif

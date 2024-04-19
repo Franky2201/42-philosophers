@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 18:42:04 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/18 15:33:18 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/19 14:21:27 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,5 @@ void	ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free)
 {
 	if (lock && pthread_mutex_destroy(lock) != 0)
 		ft_exit((char *)__func__, MUTEX_DESTROY, to_free);
-	//memset lock 0 ?
+	memset(lock, 0, sizeof(pthread_mutex_t));
 }
