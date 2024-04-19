@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/19 14:52:06 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/19 17:52:53 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ typedef struct s_philosopher
 	struct s_philosopher	*to_free;
 }	t_philosopher;
 
-void	ft_exit(char *caller_name, char *error_message, t_philosopher *to_free);
+int		ft_exit(char *caller_name, char *error_message, t_philosopher *to_free);
 void	*ft_routine(void *data);
-void	ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
-void	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free);
-void	ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free);
-void	ft_safe_mutex_init(pthread_mutex_t *lock, t_philosopher *to_free);
-void	ft_safe_mutex_lock(pthread_mutex_t *lock, t_philosopher *to_free);
-void	ft_safe_mutex_unlock(pthread_mutex_t *lock, t_philosopher *to_free);
+int		ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
+int		ft_safe_thread_join(pthread_t thread, t_philosopher *to_free);
+int		ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free);
+int		ft_safe_mutex_init(pthread_mutex_t *lock, t_philosopher *to_free);
+int		ft_safe_mutex_lock(pthread_mutex_t *lock, t_philosopher *to_free);
+int		ft_safe_mutex_unlock(pthread_mutex_t *lock, t_philosopher *to_free);
 
 #endif

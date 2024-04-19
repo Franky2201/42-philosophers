@@ -6,20 +6,27 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 18:57:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/19 14:53:47 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/19 17:55:02 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher)
+int	ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher)
 {
 	if (thread && pthread_create(thread, NULL, ft_routine, philosopher) != 0)
-		ft_exit((char *)__func__, THREAD_CREATION, philosopher->to_free);
+		return (ft_exit((char *)__func__, THREAD_CREATION, philosopher->to_free));
+	return (0);
 }
 
-void	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free)
+int	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free)
 {
-	if (thread && pthread_join(thread, NULL) != 0)
-		ft_exit((char *)__func__, THREAD_JOIN, to_free);
+	void	*retval;
+
+	retval = NULL;
+	if (thread && pthread_join(thread, &retval) != 0)
+		return (ft_exit((char *)__func__, THREAD_JOIN, to_free));
+	if (retval)
+		return (1);
+	return (0);
 }
