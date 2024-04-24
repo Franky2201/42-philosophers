@@ -42,6 +42,20 @@ typedef enum e_args
 	NUMBER_OF_MEALS
 }	t_args;
 
+typedef enum e_mutex_actions
+{
+	DESTROY,
+	INIT,
+	LOCK,
+	UNLOCK
+}	t_mutex_actions;
+
+typedef enum e_thread_actions
+{
+	CREATE,
+	JOIN
+}	t_thread_actions;
+
 typedef struct s_philosopher
 {
 	pthread_mutex_t			lock;
@@ -54,11 +68,13 @@ typedef struct s_philosopher
 
 int		ft_exit(char *caller_name, char *error_message, t_philosopher *to_free);
 void	*ft_routine(void *data);
-int		ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
+int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_philosopher *to_free);
+int		ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr, void *(*ft_routine)(void *));
+/*int		ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
 int		ft_safe_thread_join(pthread_t thread, t_philosopher *to_free);
 int		ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free);
 int		ft_safe_mutex_init(pthread_mutex_t *lock, t_philosopher *to_free);
 int		ft_safe_mutex_lock(pthread_mutex_t *lock, t_philosopher *to_free);
 int		ft_safe_mutex_unlock(pthread_mutex_t *lock, t_philosopher *to_free);
-
+*/
 #endif

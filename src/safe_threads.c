@@ -12,14 +12,14 @@
 
 #include "../inc/philo.h"
 
-int	ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher)
+static int	ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher)
 {
 	if (thread && pthread_create(thread, NULL, ft_routine, philosopher) != 0)
 		return (ft_exit((char *)__func__, THREAD_CREATION, philosopher->to_free));
 	return (0);
 }
 
-int	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free)
+static int	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free)
 {
 	void	*retval;
 
@@ -28,5 +28,16 @@ int	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free)
 		return (ft_exit((char *)__func__, THREAD_JOIN, to_free));
 	if (retval)
 		return (1);
+	return (0);
+}
+
+int	ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr, void *(*ft_routine)(void *))
+{
+	if (action == CREATE)
+		if (ft_safe_thread_create(thread, ft_routine, ptr))
+			return (1);
+	if (action == JOIN)
+		if (ft_safe_thread_join(*thread, ptr))
+			return (1);
 	return (0);
 }

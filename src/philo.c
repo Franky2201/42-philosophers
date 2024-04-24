@@ -6,31 +6,11 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/19 18:18:09 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/25 00:44:33 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-int	test = 0;
-
-void	*ft_routine(void *data)
-{
-	t_philosopher	*philosopher;
-
-	philosopher = (t_philosopher *)data;
-	if (ft_safe_mutex_lock(philosopher->master_lock, philosopher->to_free) \
-		|| ft_safe_mutex_lock(&philosopher->lock, philosopher->to_free) \
-		|| ft_safe_mutex_lock(philosopher->next_lock, philosopher->to_free))
-		return ((void *)1);
-	//printf("%p\n", &philosopher->lock);
-	test++;
-	if (ft_safe_mutex_unlock(philosopher->master_lock, philosopher->to_free) \
-		|| ft_safe_mutex_unlock(&philosopher->lock, philosopher->to_free) \
-		|| ft_safe_mutex_unlock(philosopher->next_lock, philosopher->to_free))
-		return ((void *)1);
-	return (NULL);
-}
 
 static int	ft_malloc(t_philosopher **philosophers, int *numeric_args)
 {
@@ -42,6 +22,33 @@ static int	ft_malloc(t_philosopher **philosophers, int *numeric_args)
 		return (ft_exit((char *)__func__, MALLOC, NULL));
 	memset(*philosophers, 0, size);
 	(*philosophers)->philosopher_count = numeric_args[NUMBER_OF_PHILOSOPHERS];
+	return (0);
+}
+
+static int	ft_init(t_philosopher **philosophers, int *numeric_args, pthread_mutex_t *master_lock)
+{
+	int	i;
+
+	if (ft_malloc(philosophers, numeric_args))
+		return (1);
+	if (ft_safe_mutex_init(&master_lock, philosophers))
+		return (1);
+	i = 0;
+	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
+	{
+		if (ft_safe_mutex_init(&philosophers[i].lock, philosophers))
+			return (1);
+		philosophers[i].master_lock = &master_lock;
+		philosophers[i].to_free = philosophers;
+		i++;
+	}
+	i = 0;
+	while (i + 1 < numeric_args[NUMBER_OF_PHILOSOPHERS])
+	{
+		philosophers[i].next_lock = &philosophers[i + 1].lock;
+		i++;
+	}
+	philosophers[i].next_lock = &philosophers[0].lock;
 	return (0);
 }
 
@@ -90,15 +97,6 @@ static int	ft_free(t_philosopher *to_free)
 	return (0);
 }
 
-int	ft_exit(char *caller_name, char *error_message, t_philosopher *to_free)
-{
-	if (to_free)
-		ft_free(to_free);
-	if (error_message)
-		printf("%s%s: %s%s\n", BOLD_BLUE, caller_name, error_message, END_COLOR);
-	return (1);
-}
-
 int	main(int ac, char **av)
 {
 	/*LIBFT NOT AUTHORIZED*/
@@ -109,7 +107,9 @@ int	main(int ac, char **av)
 
 	if (ft_check_args(ac, av, numeric_args))
 		return (1);
-	if (ft_malloc(&philosophers, numeric_args))
+	if (ft_init(&philosophers, numeric_args, &master_lock))
+		return (1);
+/*	if (ft_malloc(&philosophers, numeric_args))
 		return (1);
 	if (ft_safe_mutex_init(&master_lock, philosophers))
 		return (1);
@@ -129,7 +129,7 @@ int	main(int ac, char **av)
 		i++;
 	}
 	philosophers[i].next_lock = &philosophers[0].lock;
-	i = 0;
+*/	i = 0;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
 		if (ft_safe_thread_create(&philosophers[i].thread, &ft_routine, &philosophers[i]))
