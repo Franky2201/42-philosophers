@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 18:57:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/19 17:55:02 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/25 01:18:36 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ static int	ft_safe_thread_join(pthread_t thread, t_philosopher *to_free)
 	return (0);
 }
 
-int	ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr, void *(*ft_routine)(void *))
+int	ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr)
 {
 	if (action == CREATE)
-		if (ft_safe_thread_create(thread, ft_routine, ptr))
+		if (ft_safe_thread_create(thread, &ft_routine, ptr))
 			return (1);
 	if (action == JOIN)
 		if (ft_safe_thread_join(*thread, ptr))

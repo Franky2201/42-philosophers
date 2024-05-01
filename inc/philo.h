@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/19 17:52:53 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/04/25 01:20:55 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,10 @@ typedef struct s_philosopher
 }	t_philosopher;
 
 int		ft_exit(char *caller_name, char *error_message, t_philosopher *to_free);
-void	*ft_routine(void *data);
+int		ft_free(t_philosopher *to_free);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_philosopher *to_free);
-int		ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr, void *(*ft_routine)(void *));
+void	*ft_routine(void *data);
+int		ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr);
 /*int		ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
 int		ft_safe_thread_join(pthread_t thread, t_philosopher *to_free);
 int		ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free);
