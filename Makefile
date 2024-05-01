@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/04/25 01:53:45 by gde-win          ###   ########.fr        #
+#    Updated: 2024/05/01 16:42:15 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ END_COLOR :=    \033[0m
 MAKE :=			make
 
 all: $(LIBFT)
+	@echo 1- $(CFLAGS)
 	@echo "$(GREEN)Making philo"
 	@mkdir -p $(OBJS_DIR)
 	@echo -n \[
@@ -42,15 +43,17 @@ $(LIBFT):
 		@$(MAKE) -C $@
 
 $(NAME): $(OBJS)
-		$(CC) $(CFLAGS) $^ -Wl,$(LLIBFT) -pthread -o $@
+		@echo 2- $(CFLAGS)
+		@$(CC) $(CFLAGS) $^ -Wl,$(LLIBFT) -pthread -o $@
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-		$(CC) $(CFLAGS) -c $< -o $@ $(INC_FILES)
+		@echo 3- $(CFLAGS)
+		@$(CC) $(CFLAGS) -c $< -o $@ $(INC_FILES)
 		@echo -n =
 
 asan: CFLAGS += $(ASAN_FLAGS)
 asan: MAKE += asan
-asan: all
+asan: $(LIBFT) all
 	@echo "$(RED)ADDRESS SANITIZER ON$(END_COLOR)"
 
 tsan: CFLAGS += $(TSAN_FLAGS)
