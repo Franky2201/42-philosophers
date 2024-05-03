@@ -6,22 +6,39 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/25 01:20:55 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/03 18:04:55 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
+/* LIBRARIES */
 # include "../libft/inc/libft.h"
 # include <pthread.h>
 # include <stdio.h>
 # include <string.h>
+# include <sys/time.h>
 
+/* COLORS */
 # define BOLD_BLUE "\033[1;34m"
 # define END_COLOR "\033[0m"
 
-# define INVALID_ARGS "Arguments must be positive decimal integers"
+/* PHILOSOPHERS EVENTS */
+# define DIE "died"
+# define EAT "is eating"
+# define FORK "has taken a fork"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+
+/* INVALID ARGUMENTS */
+# define INVALID_ARGS "arguments must be positive decimal integers"
+# define USAGE "usage: ./philo <number_of_philosophers> <time_to_die> \
+<time_to_eat> <time_to_sleep> \
+[optional]<number_of_times_each_philosopher_must_eat>"
+
+/* FUNCTIONS FAILURES */
+# define GETTIMEOFDAY "gettimeofday failure"
 # define MALLOC "malloc failure"
 # define MUTEX_DESTROY "mutex destroyment failure"
 # define MUTEX_INIT "mutex initialization failure"
@@ -29,10 +46,8 @@
 # define MUTEX_UNLOCK "mutex unlock failure"
 # define THREAD_CREATION "thread creation failure"
 # define THREAD_JOIN "thread join failure"
-# define USAGE "Usage: ./philo <number_of_philosophers> <time_to_die> \
-<time_to_eat> <time_to_sleep> \
-[optional]<number_of_times_each_philosopher_must_eat>"
 
+/* ENUMS */
 typedef enum e_args
 {
 	NUMBER_OF_PHILOSOPHERS,
@@ -56,26 +71,29 @@ typedef enum e_thread_actions
 	JOIN
 }	t_thread_actions;
 
+/* STRUCTS */
 typedef struct s_philosopher
 {
-	pthread_mutex_t			lock;
-	pthread_mutex_t			*master_lock;
-	pthread_mutex_t			*next_lock;
-	pthread_t				thread;
-	size_t					philosopher_count;
-	struct s_philosopher	*to_free;
+	pthread_mutex_t	lock;
+	pthread_mutex_t	*next_lock;
+	pthread_t		thread;
+	size_t			index;
+	struct s_data	*data;
 }	t_philosopher;
 
-int		ft_exit(char *caller_name, char *error_message, t_philosopher *to_free);
-int		ft_free(t_philosopher *to_free);
-int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_philosopher *to_free);
-void	*ft_routine(void *data);
-int		ft_thread(t_thread_actions action, pthread_t *thread, t_philosopher *ptr);
-/*int		ft_safe_thread_create(pthread_t *thread, void *(*ft_routine)(void *), t_philosopher *philosopher);
-int		ft_safe_thread_join(pthread_t thread, t_philosopher *to_free);
-int		ft_safe_mutex_destroy(pthread_mutex_t *lock, t_philosopher *to_free);
-int		ft_safe_mutex_init(pthread_mutex_t *lock, t_philosopher *to_free);
-int		ft_safe_mutex_lock(pthread_mutex_t *lock, t_philosopher *to_free);
-int		ft_safe_mutex_unlock(pthread_mutex_t *lock, t_philosopher *to_free);
-*/
+typedef struct s_data
+{
+	int				numeric_args[5];
+	pthread_mutex_t	master_lock;
+	size_t			philosopher_count;
+	struct timeval	base_timestamp;
+	t_philosopher	*to_free;
+}	t_data;
+
+/* FUNCTIONS */
+int		ft_exit(char *caller_name, char *error_message, t_data *data);
+int		ft_free(t_data *data);
+int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
+void	*ft_routine(void *ptr);
+int		ft_thread(t_thread_actions action, pthread_t *thread, void *ptr);
 #endif
