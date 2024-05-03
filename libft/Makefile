@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/17 13:05:02 by gde-win           #+#    #+#              #
-#    Updated: 2024/04/25 02:52:24 by gde-win          ###   ########.fr        #
+#    Updated: 2024/05/03 11:52:49 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,17 +75,18 @@ OBJS_DIR :=		obj
 OBJS :=			$(addprefix $(OBJS_DIR)/, $(SRCS:$(SRCS_DIR)/%.c=%.o))
 GREEN :=		\033[0;32m
 RED :=			\033[0;31m
-END_COLOR :=	\033[0m
+NO_COLOR :=		\033[0m
 
-all:
-	@echo "$(GREEN)Making libft"
+all: $(OBJS_DIR) $(NAME)
+
+$(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
+	@echo "$(GREEN)Making libft"
 	@echo -n \[
-	@make $(NAME)
-	@echo "]$(END_COLOR)"
 
 $(NAME): $(OBJS)
 	@$(AR) -rc $@ $^
+	@echo "]$(NO_COLOR)"
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@ $(INC_FILES)
