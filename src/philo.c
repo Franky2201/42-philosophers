@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/25 01:34:52 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/03 12:07:50 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static int	ft_init(t_philosopher **ptr, int *numeric_args, pthread_mutex_t *mast
 	int				i;
 	t_philosopher	*philosophers;
 
-	philosophers = *ptr;
 	if (ft_malloc(ptr, numeric_args))
 		return (1);
+	philosophers = *ptr;
 	if (ft_mutex(INIT, master_lock, philosophers))
 		return (1);
 	i = 0;
