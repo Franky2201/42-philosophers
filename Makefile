@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/05/03 11:52:11 by gde-win          ###   ########.fr        #
+#    Updated: 2024/05/07 23:47:45 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ CFLAGS :=		-Wall -Wextra -Werror
 ASAN_FLAGS :=	-fsanitize=address -g
 TSAN_FLAGS :=	-fsanitize=thread -g
 INC_FILES :=	-I/inc
-FUNCTIONS :=	philo.c \
+FUNCTIONS :=	live.c \
+				philo.c \
 				philo_utils.c \
 				safe_mutexes.c \
 				safe_threads.c

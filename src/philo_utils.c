@@ -6,53 +6,79 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 00:12:09 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/03 18:06:07 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 00:10:30 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	ft_print_event(char *event, size_t philosopher, t_data *data)
+void	*ft_healthcheck(void *ptr)
 {
-	int	seconds;
-	int	milliseconds;
-
-	/* gettimeofday and compare with base_time */
-	printf("%i%i %zu %s\n" philosopher, event);
-}
-
-static int	ft_eat(t_philosopher *philosopher, t_data *data)
-{
-	if (ft_mutex(LOCK, &philosopher->lock, data))
-		return (1);
-	printf("%i %zu %s\n" philosopher->index, FORK);
-	if (ft_mutex(LOCK, philosopher->next_lock, data))
-		return (1);
-}
-
-void	*ft_routine(void *ptr)
-{
+	int				elapsed;
+	size_t			i;
 	t_data			*data;
 	t_philosopher	*philosopher;
 
 	philosopher = (t_philosopher *)ptr;
 	data = philosopher->data;
-	if (ft_mutex(LOCK, &data->master_lock, data) \
-		|| ft_mutex(LOCK, &philosopher->lock, data) \
-		|| ft_mutex(LOCK, philosopher->next_lock, data))
-		return ((void *)1);
-	//printf("%p\n", &philosopher->lock);
-	if (ft_mutex(UNLOCK, &data->master_lock, data) \
-		|| ft_mutex(UNLOCK, &philosopher->lock, data) \
-		|| ft_mutex(UNLOCK, philosopher->next_lock, data))
-		return ((void *)1);
+	printf("%p\n", data);
+	while (!data->death)
+	{
+		i = 0;
+		if (ft_safe_sleep(data) || ft_gettime(&elapsed, data))
+			return (ptr);
+		while (i < data->philosopher_count)
+		{
+			if (elapsed - philosopher[i].last_meal > data->numeric_args[TIME_TO_DIE])
+			{
+				data->death = true;
+				break ;
+			}
+			i++;
+		}
+	}
 	return (NULL);
 }
 
-int	ft_time(struct timeval *time)
+void	*ft_routine(void *ptr)
 {
-	if (gettimeofday(time, NULL))
+	int				i;
+	int				meals;
+	t_data			*data;
+	t_philosopher	*philosopher;
+
+	philosopher = (t_philosopher *)ptr;
+	data = philosopher->data;
+	meals = data->numeric_args[NUMBER_OF_MEALS];
+	i = 0;
+	while (i != meals && !data->death)
+	{
+		if (meals != -1 && i < meals)
+			i++;
+		if (ft_eat(philosopher, data) \
+			|| ft_sleep(philosopher, data))
+			return (ptr);
+	}
+	return (NULL);
+}
+
+int	ft_safe_sleep(t_data *data)
+{
+	if (usleep(500) != 0)
+		return (ft_exit((char *)__func__, USLEEP, data));
+	return (0);
+}
+
+int	ft_gettime(int *timestamp, t_data *data)
+{
+	int				seconds;
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) != 0)
 		return (ft_exit((char *)__func__, GETTIMEOFDAY, data));
+	seconds = time.tv_sec - data->base_timestamp.tv_sec;
+	*timestamp = (time.tv_usec - data->base_timestamp.tv_usec) / 1000;
+	*timestamp += seconds * 1000;
 	return (0);
 }
 

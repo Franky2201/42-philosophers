@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/03 18:04:55 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/07 23:59:25 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@
 # define MUTEX_INIT "mutex initialization failure"
 # define MUTEX_LOCK "mutex lock failure"
 # define MUTEX_UNLOCK "mutex unlock failure"
+# define PRINTF "printf failure"
 # define THREAD_CREATION "thread creation failure"
 # define THREAD_JOIN "thread join failure"
+# define USLEEP "usleep failure"
 
 /* ENUMS */
 typedef enum e_args
@@ -68,12 +70,14 @@ typedef enum e_mutex_actions
 typedef enum e_thread_actions
 {
 	CREATE,
+	HEALTH,
 	JOIN
 }	t_thread_actions;
 
 /* STRUCTS */
 typedef struct s_philosopher
 {
+	int				last_meal;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*next_lock;
 	pthread_t		thread;
@@ -83,6 +87,7 @@ typedef struct s_philosopher
 
 typedef struct s_data
 {
+	bool			death;
 	int				numeric_args[5];
 	pthread_mutex_t	master_lock;
 	size_t			philosopher_count;
@@ -91,9 +96,14 @@ typedef struct s_data
 }	t_data;
 
 /* FUNCTIONS */
+int		ft_eat(t_philosopher *philosopher, t_data *data);
 int		ft_exit(char *caller_name, char *error_message, t_data *data);
 int		ft_free(t_data *data);
+int		ft_gettime(int *timestamp, t_data *data);
+void    *ft_healthcheck(void *ptr);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
 void	*ft_routine(void *ptr);
+int		ft_safe_sleep(t_data *data);
+int		ft_sleep(t_philosopher *philosopher, t_data *data);
 int		ft_thread(t_thread_actions action, pthread_t *thread, void *ptr);
 #endif

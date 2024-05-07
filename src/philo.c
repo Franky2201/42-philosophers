@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/03 17:54:11 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/07 23:20:43 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ static int	ft_run(t_data *data)
 {
 	int				i;
 	int				*numeric_args;
+	pthread_t		health_thread;
 	t_philosopher	*philosophers;
 
-	if (ft_time(&data->base_timestamp))
-		return (1);
+	if (gettimeofday(&data->base_timestamp, NULL) != 0)
+		return (ft_exit((char *)__func__, GETTIMEOFDAY, data));
 	philosophers = data->to_free;
 	numeric_args = data->numeric_args;
 	i = 0;
@@ -36,6 +37,8 @@ static int	ft_run(t_data *data)
 			return (1);
 		i++;
 	}
+	if (ft_thread(HEALTH, &health_thread, data) || ft_thread(JOIN, &health_thread, data))
+		return (1);
 	return (0);
 }
 
