@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/08 15:41:02 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 20:00:52 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 # define MUTEX_UNLOCK "mutex unlock failure"
 # define PRINTF "printf failure"
 # define THREAD_CREATION "thread creation failure"
+# define THREAD_DETACH "thread detachment failure"
 # define THREAD_JOIN "thread join failure"
 # define USLEEP "usleep failure"
 
@@ -70,6 +71,7 @@ typedef enum e_mutex_actions
 typedef enum e_thread_actions
 {
 	CREATE,
+	DETACH,
 	HEALTH,
 	JOIN
 }	t_thread_actions;
@@ -101,11 +103,10 @@ int		ft_eat(t_philosopher *philosopher, t_data *data);
 int		ft_exit(char *caller_name, char *error_message, t_data *data);
 int		ft_free(t_data *data);
 int		ft_gettime(int *timestamp, t_data *data);
-void    *ft_healthcheck(void *ptr);
+void	*ft_healthcheck(void *ptr);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
-int		ft_print_event(char *event, int *timestamp, size_t philosopher, t_data *data);
 void	*ft_routine(void *ptr);
-int		ft_safe_sleep(t_data *data);
+int		ft_safe_usleep(t_data *data);
 int		ft_sleep(t_philosopher *philosopher, t_data *data);
 int		ft_thread(t_thread_actions action, pthread_t *thread, void *ptr);
 #endif

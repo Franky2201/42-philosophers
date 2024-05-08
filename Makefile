@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/05/07 23:47:45 by gde-win          ###   ########.fr        #
+#    Updated: 2024/05/08 18:08:39 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,9 @@ TSAN_FLAGS :=	-fsanitize=thread -g
 INC_FILES :=	-I/inc
 FUNCTIONS :=	live.c \
 				philo.c \
-				philo_utils.c \
 				safe_mutexes.c \
-				safe_threads.c
+				safe_threads.c \
+				utils.c
 LIBFT :=		libft
 LLIBFT :=		$(addsuffix /libft.a, $(LIBFT))
 SRCS_DIR :=		src

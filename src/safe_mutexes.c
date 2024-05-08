@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 18:42:04 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/03 17:17:39 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 18:58:29 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ static int	ft_safe_mutex_destroy(pthread_mutex_t *lock, t_data *data)
 
 int	ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data)
 {
-	if (action == DESTROY)
-		if (ft_safe_mutex_destroy(lock, data))
-			return (1);
 	if (action == INIT)
 		if (ft_safe_mutex_init(lock, data))
 			return (1);
@@ -54,6 +51,9 @@ int	ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data)
 			return (1);
 	if (action == UNLOCK)
 		if (ft_safe_mutex_unlock(lock, data))
+			return (1);
+	if (action == DESTROY)
+		if (ft_safe_mutex_destroy(lock, data))
 			return (1);
 	return (0);
 }

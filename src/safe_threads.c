@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 18:57:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/07 22:30:14 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 19:59:12 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ static int	ft_safe_thread_join(pthread_t thread, t_data *data)
 	return (0);
 }
 
+static int	ft_safe_thread_detach(pthread_t thread)
+{
+	if (thread && pthread_detach(thread) != 0)
+		return (ft_exit((char *)__func__, THREAD_DETACH, NULL));
+	return (0);
+}
+
 int	ft_thread(t_thread_actions action, pthread_t *thread, void *ptr)
 {
 	if (action == CREATE)
@@ -41,6 +48,9 @@ int	ft_thread(t_thread_actions action, pthread_t *thread, void *ptr)
 			return (1);
 	if (action == JOIN)
 		if (ft_safe_thread_join(*thread, (t_data *)ptr))
+			return (1);
+	if (action == DETACH)
+		if (ft_safe_thread_detach(*thread))
 			return (1);
 	return (0);
 }

@@ -1,50 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 00:12:09 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/08 15:58:30 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 22:19:15 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-void	*ft_healthcheck(void *ptr)
-{
-	bool			flag;
-	int				elapsed;
-	size_t			i;
-	t_data			*data;
-	t_philosopher	*philosopher;
-
-	philosopher = (t_philosopher *)ptr;
-	data = philosopher->data;
-	flag = false;
-	while (!data->death && !flag)
-	{
-		i = 0;
-		if (ft_safe_sleep(data) || ft_gettime(&elapsed, data))
-			return (ptr);
-		flag = true;
-		while (i < data->philosopher_count)
-		{
-			if (philosopher[i].meal_count < data->numeric_args[NUMBER_OF_MEALS])
-				flag = false;
-			if (elapsed - philosopher[i].last_meal > data->numeric_args[TIME_TO_DIE])
-			{
-				data->death = true;
-				if (ft_print_event(DIE, &elapsed, i + 1, data))
-					return (ptr);
-				break ;
-			}
-			i++;
-		}
-	}
-	return (NULL);
-}
 
 void	*ft_routine(void *ptr)
 {
@@ -66,9 +32,9 @@ void	*ft_routine(void *ptr)
 	return (NULL);
 }
 
-int	ft_safe_sleep(t_data *data)
+int	ft_safe_usleep(t_data *data)
 {
-	if (usleep(500) != 0)
+	if (usleep(50) != 0)
 		return (ft_exit((char *)__func__, USLEEP, data));
 	return (0);
 }
@@ -92,6 +58,12 @@ int	ft_free(t_data *data)
 	t_philosopher	*to_free;
 
 	to_free = data->to_free;
+	if (data->philosopher_count == 1)
+	{
+		if (ft_mutex(UNLOCK, &to_free->lock, NULL) \
+			|| ft_mutex(UNLOCK, &data->master_lock, NULL))
+			return (1);
+	}
 	i = 0;
 	while (i < data->philosopher_count)
 	{
