@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/07 23:20:43 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 15:35:54 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int	ft_run(t_data *data)
 			return (1);
 		i++;
 	}
+	if (ft_thread(HEALTH, &health_thread, philosophers) || ft_thread(JOIN, &health_thread, data))
+		return (1);
 	i = 0;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
@@ -37,8 +39,6 @@ static int	ft_run(t_data *data)
 			return (1);
 		i++;
 	}
-	if (ft_thread(HEALTH, &health_thread, data) || ft_thread(JOIN, &health_thread, data))
-		return (1);
 	return (0);
 }
 

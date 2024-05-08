@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/07 23:59:25 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/08 15:41:02 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef enum e_thread_actions
 typedef struct s_philosopher
 {
 	int				last_meal;
+	int				meal_count;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*next_lock;
 	pthread_t		thread;
@@ -102,6 +103,7 @@ int		ft_free(t_data *data);
 int		ft_gettime(int *timestamp, t_data *data);
 void    *ft_healthcheck(void *ptr);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
+int		ft_print_event(char *event, int *timestamp, size_t philosopher, t_data *data);
 void	*ft_routine(void *ptr);
 int		ft_safe_sleep(t_data *data);
 int		ft_sleep(t_philosopher *philosopher, t_data *data);
