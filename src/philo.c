@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/08 20:47:07 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/09 20:04:20 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int	ft_run(t_data *data)
 {
 	int				i;
 	int				*numeric_args;
-	pthread_t		health_thread;
 	t_philosopher	*philosophers;
 
 	if (gettimeofday(&data->base_timestamp, NULL) != 0)
@@ -30,6 +29,8 @@ static int	ft_run(t_data *data)
 			return (1);
 		i += 2;
 	}
+	if (ft_safe_usleep(data))
+		return (1);
 	i = 1;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
@@ -37,16 +38,14 @@ static int	ft_run(t_data *data)
 			return (1);
 		i += 2;
 	}
-	if (ft_thread(HEALTH, &health_thread, philosophers) || ft_thread(JOIN, &health_thread, data))
-		return (1);
-/*	i = 0;
+	i = 0;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
 		if (ft_thread(JOIN, &philosophers[i].thread, data))
 			return (1);
 		i++;
 	}
-*/	return (0);
+	return (0);
 }
 
 static int	ft_malloc(t_data *data)
@@ -124,6 +123,7 @@ static int	ft_check_args(int ac, char **av, int *numeric_args)
 int	main(int ac, char **av)
 {
 	/*LIBFT NOT AUTHORIZED*/
+	pthread_t		health_thread;
 	t_data			data;
 
 	memset(&data, 0, sizeof(t_data));
@@ -131,7 +131,11 @@ int	main(int ac, char **av)
 		return (1);
 	if (ft_init(&data))
 		return (1);
+	if (ft_thread(HEALTH, &health_thread, data.to_free))
+		return (1);
 	if (ft_run(&data))
+		return (1);
+	if (ft_thread(JOIN, &health_thread, &data))
 		return (1);
 	return (ft_free(&data));
 }

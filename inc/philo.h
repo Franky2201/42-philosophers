@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/08 20:00:52 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/09 19:11:50 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_data
 {
 	bool			death;
 	int				numeric_args[5];
+	pthread_mutex_t	death_lock;
 	pthread_mutex_t	master_lock;
 	size_t			philosopher_count;
 	struct timeval	base_timestamp;

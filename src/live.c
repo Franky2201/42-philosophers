@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/08 21:23:58 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/09 19:22:59 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,7 @@ void	*ft_healthcheck(void *ptr)
 		if (ft_die(philosophers, data, &flag))
 			return (ptr);
 	}
+	if (data->philosopher_count == 1 && ft_mutex(UNLOCK, &philosophers->lock, data))
+			return (ptr);
 	return (NULL);
 }
