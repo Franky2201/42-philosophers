@@ -6,11 +6,20 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 00:12:09 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/08 22:19:15 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/10 22:06:50 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+int	ft_has_anyone_died(t_data *data)
+{
+	if (ft_mutex(LOCK, &data->death_lock, data) \
+		|| data->death \
+		|| ft_mutex(UNLOCK, &data->death_lock, data))
+		return (1);
+	return (0);
+}
 
 void	*ft_routine(void *ptr)
 {
@@ -21,20 +30,22 @@ void	*ft_routine(void *ptr)
 	philosopher = (t_philosopher *)ptr;
 	data = philosopher->data;
 	meals = data->numeric_args[NUMBER_OF_MEALS];
-	while (philosopher->meal_count != meals && !data->death)
+	while (philosopher->meal_count != meals && !ft_has_anyone_died(data))
 	{
-		if (meals != -1 && philosopher->meal_count < meals)
-			philosopher->meal_count++;
+		printf("rout 1\n");
 		if (ft_eat(philosopher, data) \
 			|| ft_sleep(philosopher, data))
 			return (ptr);
+//		if (meals != -1 && philosopher->meal_count < meals)
+			philosopher->meal_count++;
+		printf("rout 2\n");
 	}
 	return (NULL);
 }
 
 int	ft_safe_usleep(t_data *data)
 {
-	if (usleep(50) != 0)
+	if (usleep(500) != 0)
 		return (ft_exit((char *)__func__, USLEEP, data));
 	return (0);
 }
@@ -74,6 +85,7 @@ int	ft_free(t_data *data)
 	if (ft_mutex(DESTROY, &data->master_lock, NULL))
 		return (1);
 	free(to_free);
+	data->to_free = NULL;
 	return (0);
 }
 

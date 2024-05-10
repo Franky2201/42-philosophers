@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/09 19:11:50 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/10 17:28:58 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int		ft_eat(t_philosopher *philosopher, t_data *data);
 int		ft_exit(char *caller_name, char *error_message, t_data *data);
 int		ft_free(t_data *data);
 int		ft_gettime(int *timestamp, t_data *data);
+int		ft_has_anyone_died(t_data *data);
 void	*ft_healthcheck(void *ptr);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
 void	*ft_routine(void *ptr);

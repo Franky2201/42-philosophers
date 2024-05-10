@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/09 20:04:20 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/10 22:06:10 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ static int	ft_run(t_data *data)
 			return (1);
 		i += 2;
 	}
+	printf("run 1\n");
 	if (ft_safe_usleep(data))
 		return (1);
+	printf("run 2\n");
 	i = 1;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
@@ -38,6 +40,7 @@ static int	ft_run(t_data *data)
 			return (1);
 		i += 2;
 	}
+	printf("run 3\n");
 	i = 0;
 	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
 	{
@@ -45,6 +48,7 @@ static int	ft_run(t_data *data)
 			return (1);
 		i++;
 	}
+	printf("run 4\n");
 	return (0);
 }
 
@@ -129,13 +133,18 @@ int	main(int ac, char **av)
 	memset(&data, 0, sizeof(t_data));
 	if (ft_check_args(ac, av, data.numeric_args))
 		return (1);
+	printf("ok 1\n");
 	if (ft_init(&data))
 		return (1);
+	printf("ok 2\n");
 	if (ft_thread(HEALTH, &health_thread, data.to_free))
 		return (1);
+	printf("ok 3\n");
 	if (ft_run(&data))
 		return (1);
+	printf("ok 4\n");
 	if (ft_thread(JOIN, &health_thread, &data))
 		return (1);
+	printf("ok 5\n");
 	return (ft_free(&data));
 }
