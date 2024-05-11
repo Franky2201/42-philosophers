@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/11 17:51:34 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/11 19:44:30 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ static int	ft_print_event(char *event, int *timestamp, size_t philosopher, t_dat
 static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 {
 	int		elapsed;
-	int		number_of_meals;
 	int		time_to_die;
 	size_t	i;
 
-	number_of_meals = data->numeric_args[NUMBER_OF_MEALS];
 	time_to_die = data->numeric_args[TIME_TO_DIE];
 	i = 0;
 	while (i < data->philosopher_count)
 	{
-		if (philosophers[i].meal_count != number_of_meals)
+		if (!ft_meal_limit_reached(&philosophers[i]))
 		{
+			if (ft_mutex(UNLOCK, &data->master_lock, data))
+				return (1);
 			*flag = false;
 			if (ft_gettime(&elapsed, data))
 				return (1);
@@ -45,14 +45,18 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 			elapsed -= philosophers[i].last_meal;
 			if (ft_mutex(UNLOCK, &data->master_lock, data))
 				return (1);
-			if (elapsed > time_to_die)
+			if (elapsed >= time_to_die)
 			{
+				if (ft_mutex(LOCK, &data->master_lock, data))
+					return (1);
 				if (ft_print_event(DIE, &elapsed, i + 1, data))
 					return (1);
 				if (ft_mutex(LOCK, &data->death_lock, data))
 					return (1);
 				data->death = true;
 				if (ft_mutex(UNLOCK, &data->death_lock, data))
+					return (1);
+				if (ft_mutex(UNLOCK, &data->master_lock, data))
 					return (1);
 				return (0);
 			}
@@ -69,8 +73,7 @@ int	ft_eat(t_philosopher *philosopher, t_data *data)
 	int	timestamp;
 
 	time_to_eat = data->numeric_args[TIME_TO_EAT];
-	if (/*ft_mutex(LOCK, &data->master_lock, data) \
-		|| */ft_mutex(LOCK, &philosopher->lock, data) \
+	if (ft_mutex(LOCK, &philosopher->lock, data) \
 		|| ft_print_event(FORK, &timestamp, philosopher->index, data))
 		return (1);
 	if (&philosopher->lock == philosopher->next_lock)
@@ -86,8 +89,9 @@ int	ft_eat(t_philosopher *philosopher, t_data *data)
 	}
 	if (ft_mutex(LOCK, philosopher->next_lock, data) \
 		|| ft_print_event(FORK, &timestamp, philosopher->index, data) \
-		|| ft_print_event(EAT, &timestamp, philosopher->index, data)/* \
-		|| ft_mutex(UNLOCK, &data->master_lock, data)*/)
+		|| ft_mutex(LOCK, &data->master_lock, data) \
+		|| ft_print_event(EAT, &timestamp, philosopher->index, data) \
+		|| ft_mutex(UNLOCK, &data->master_lock, data))
 		return (1);
 	if (ft_mutex(LOCK, &data->master_lock, data))
 		return (1);
@@ -114,7 +118,11 @@ int	ft_sleep(t_philosopher *philosopher, t_data *data)
 	int	timestamp;
 
 	time_to_sleep = data->numeric_args[TIME_TO_SLEEP];
+	if (ft_mutex(LOCK, &data->master_lock, data))
+		return (1);
 	if (ft_print_event(SLEEP, &timestamp, philosopher->index, data))
+		return (1);
+	if (ft_mutex(UNLOCK, &data->master_lock, data))
 		return (1);
 	elapsed = 0;
 	while (elapsed < time_to_sleep)
@@ -123,7 +131,11 @@ int	ft_sleep(t_philosopher *philosopher, t_data *data)
 			return (1);
 		elapsed -= timestamp;
 	}
+	if (ft_mutex(LOCK, &data->master_lock, data))
+		return (1);
 	if (ft_print_event(THINK, &timestamp, philosopher->index, data))
+		return (1);
+	if (ft_mutex(UNLOCK, &data->master_lock, data))
 		return (1);
 	return (0);
 }
