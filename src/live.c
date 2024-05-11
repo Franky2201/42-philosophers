@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/10 22:04:42 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:51:34 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 				data->death = true;
 				if (ft_mutex(UNLOCK, &data->death_lock, data))
 					return (1);
-				break ;
+				return (0);
 			}
 		}
 		i++;
@@ -69,34 +69,38 @@ int	ft_eat(t_philosopher *philosopher, t_data *data)
 	int	timestamp;
 
 	time_to_eat = data->numeric_args[TIME_TO_EAT];
-	printf("eat 1\n");
 	if (/*ft_mutex(LOCK, &data->master_lock, data) \
 		|| */ft_mutex(LOCK, &philosopher->lock, data) \
 		|| ft_print_event(FORK, &timestamp, philosopher->index, data))
 		return (1);
-	if (&philosopher->lock != philosopher->next_lock \
-		&& (ft_mutex(LOCK, philosopher->next_lock, data) \
-			|| ft_print_event(FORK, &timestamp, philosopher->index, data) \
-			|| ft_print_event(EAT, &timestamp, philosopher->index, data)/* \
-			|| ft_mutex(UNLOCK, &data->master_lock, data)*/))
+	if (&philosopher->lock == philosopher->next_lock)
+	{
+		while (!ft_has_anyone_died(data))
+		{
+			if (ft_safe_usleep(data))
+				return (1);
+		}
+		if (ft_mutex(UNLOCK, &philosopher->lock, data))
+			return (1);
+		return (0);
+	}
+	if (ft_mutex(LOCK, philosopher->next_lock, data) \
+		|| ft_print_event(FORK, &timestamp, philosopher->index, data) \
+		|| ft_print_event(EAT, &timestamp, philosopher->index, data)/* \
+		|| ft_mutex(UNLOCK, &data->master_lock, data)*/)
 		return (1);
-	else while (!ft_has_anyone_died(data))
-		ft_safe_usleep(data);
-	printf("eat 2\n");
 	if (ft_mutex(LOCK, &data->master_lock, data))
 		return (1);
 	philosopher->last_meal = timestamp;
 	if (ft_mutex(UNLOCK, &data->master_lock, data))
 		return (1);
 	elapsed = 0;
-	printf("eat 3\n");
 	while (elapsed < time_to_eat)
 	{
 		if (ft_safe_usleep(data) || ft_gettime(&elapsed, data))
 			return (1);
 		elapsed -= timestamp;
 	}
-	printf("eat 4\n");
 	if (ft_mutex(UNLOCK, &philosopher->lock, data) \
 		|| ft_mutex(UNLOCK, philosopher->next_lock, data))
 		return (1);
@@ -113,14 +117,12 @@ int	ft_sleep(t_philosopher *philosopher, t_data *data)
 	if (ft_print_event(SLEEP, &timestamp, philosopher->index, data))
 		return (1);
 	elapsed = 0;
-	printf("sleep 1\n");
 	while (elapsed < time_to_sleep)
 	{
 		if (ft_safe_usleep(data) || ft_gettime(&elapsed, data))
 			return (1);
 		elapsed -= timestamp;
 	}
-	printf("sleep 2\n");
 	if (ft_print_event(THINK, &timestamp, philosopher->index, data))
 		return (1);
 	return (0);
@@ -143,12 +145,5 @@ void	*ft_healthcheck(void *ptr)
 		if (ft_die(philosophers, data, &flag))
 			return (ptr);
 	}
-	printf("health 1\n");
-	//can't unlock the mutex from other thread
-/*	if (data->philosopher_count == 1 \
-		&& (ft_mutex(UNLOCK, &philosophers->lock, data) || ft_safe_usleep(data) \
-			|| ft_mutex(UNLOCK, &philosophers->lock, data)))
-			return (ptr);
-*/	printf("health 2\n");
 	return (NULL);
 }
