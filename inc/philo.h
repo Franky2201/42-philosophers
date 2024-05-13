@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/11 19:41:23 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/13 11:54:47 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ typedef enum e_thread_actions
 /* STRUCTS */
 typedef struct s_philosopher
 {
-	int				last_meal;
+	sig_atomic_t	last_meal;
 	int				meal_count;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	*next_lock;

@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/11 19:44:30 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/13 11:54:52 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,7 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 			*flag = false;
 			if (ft_gettime(&elapsed, data))
 				return (1);
-			if (ft_mutex(LOCK, &data->master_lock, data))
-				return (1);
 			elapsed -= philosophers[i].last_meal;
-			if (ft_mutex(UNLOCK, &data->master_lock, data))
-				return (1);
 			if (elapsed >= time_to_die)
 			{
 				if (ft_mutex(LOCK, &data->master_lock, data))
@@ -93,11 +89,7 @@ int	ft_eat(t_philosopher *philosopher, t_data *data)
 		|| ft_print_event(EAT, &timestamp, philosopher->index, data) \
 		|| ft_mutex(UNLOCK, &data->master_lock, data))
 		return (1);
-	if (ft_mutex(LOCK, &data->master_lock, data))
-		return (1);
 	philosopher->last_meal = timestamp;
-	if (ft_mutex(UNLOCK, &data->master_lock, data))
-		return (1);
 	elapsed = 0;
 	while (elapsed < time_to_eat)
 	{
