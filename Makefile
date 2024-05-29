@@ -6,13 +6,13 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/05/08 18:08:39 by gde-win          ###   ########.fr        #
+#    Updated: 2024/05/29 17:50:55 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME :=			philo
 CC :=			cc
-CFLAGS :=		-Wall -Wextra -Werror
+CFLAGS :=		-Wall -Wextra -Werror -O3
 ASAN_FLAGS :=	-fsanitize=address -g
 TSAN_FLAGS :=	-fsanitize=thread -g
 INC_FILES :=	-I/inc

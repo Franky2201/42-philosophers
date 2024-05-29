@@ -6,13 +6,14 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/13 11:54:52 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/29 17:38:56 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static int	ft_print_event(char *event, int *timestamp, size_t philosopher, t_data *data)
+static int	ft_print_event(char *event, int *timestamp, \
+				size_t philosopher, t_data *data)
 {
 	if (ft_gettime(timestamp, data))
 		return (1);
