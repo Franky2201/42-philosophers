@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/29 17:38:56 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/29 18:08:03 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int	ft_eat(t_philosopher *philosopher, t_data *data)
 		|| ft_print_event(EAT, &timestamp, philosopher->index, data) \
 		|| ft_mutex(UNLOCK, &data->master_lock, data))
 		return (1);
+	//data race
 	philosopher->last_meal = timestamp;
 	elapsed = 0;
 	while (elapsed < time_to_eat)
