@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/29 18:09:41 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:07:28 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,16 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 	{
 		if (!ft_meal_limit_reached(&philosophers[i]))
 		{
-			if (ft_mutex(UNLOCK, &data->master_lock, data))
-				return (1);
+			/*if (ft_mutex(UNLOCK, &data->master_lock, data))
+				return (1);*/
 			*flag = false;
 			if (ft_gettime(&elapsed, data))
 				return (1);
+			if (ft_mutex(LOCK, &data->master_lock, data))
+				return (1);
 			elapsed -= philosophers[i].last_meal;
+			if (ft_mutex(UNLOCK, &data->master_lock, data))
+				return (1);
 			if (elapsed >= time_to_die)
 			{
 				if (ft_mutex(LOCK, &data->master_lock, data))
@@ -87,10 +91,11 @@ int	ft_eat(t_philosopher *philosopher, t_data *data)
 	if (ft_mutex(LOCK, philosopher->next_lock, data) \
 		|| ft_print_event(FORK, &timestamp, philosopher->index, data) \
 		|| ft_mutex(LOCK, &data->master_lock, data) \
-		|| ft_print_event(EAT, &timestamp, philosopher->index, data) \
-		|| ft_mutex(UNLOCK, &data->master_lock, data))
+		|| ft_print_event(EAT, &timestamp, philosopher->index, data))
 		return (1);
 	philosopher->last_meal = timestamp;
+	if (ft_mutex(UNLOCK, &data->master_lock, data))
+		return (1);
 	elapsed = 0;
 	while (elapsed < time_to_eat)
 	{
