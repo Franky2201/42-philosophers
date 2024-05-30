@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 00:12:09 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/11 19:44:58 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:25:17 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ int	ft_exit(char *caller_name, char *error_message, t_data *data)
 	if (data && data->to_free)
 		ft_free(data);
 	if (error_message)
-		printf("%s%s: %s%s\n", BOLD_BLUE, caller_name, error_message, END_COLOR);
+		printf("%s%s: %s%s\n", \
+				BOLD_BLUE, caller_name, error_message, END_COLOR);
 	return (1);
 }

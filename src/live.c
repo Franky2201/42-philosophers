@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/30 19:07:28 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:44:51 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 	{
 		if (!ft_meal_limit_reached(&philosophers[i]))
 		{
-			/*if (ft_mutex(UNLOCK, &data->master_lock, data))
-				return (1);*/
 			*flag = false;
 			if (ft_gettime(&elapsed, data))
 				return (1);
@@ -48,8 +46,8 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 				return (1);
 			if (elapsed >= time_to_die)
 			{
-				if (ft_mutex(LOCK, &data->master_lock, data))
-					return (1);
+				/*if (ft_mutex(LOCK, &data->master_lock, data))
+					return (1);*/
 				if (ft_print_event(DIE, &elapsed, i + 1, data))
 					return (1);
 				if (ft_mutex(LOCK, &data->death_lock, data))
@@ -57,8 +55,8 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 				data->death = true;
 				if (ft_mutex(UNLOCK, &data->death_lock, data))
 					return (1);
-				if (ft_mutex(UNLOCK, &data->master_lock, data))
-					return (1);
+				/*if (ft_mutex(UNLOCK, &data->master_lock, data))
+					return (1);*/
 				return (0);
 			}
 		}
