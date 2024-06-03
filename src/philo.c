@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/06/03 19:17:37 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/03 19:20:55 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	ft_run(t_data *data)
 	return (0);
 }
 
-static int	ft_malloc(t_data *data)
+static int	ft_malloc(t_philosopher **philosophers, t_data *data)
 {
 	int				*numeric_args;
 	size_t			size;
@@ -64,6 +64,7 @@ static int	ft_malloc(t_data *data)
 		return (ft_exit((char *)__func__, MALLOC, NULL));
 	memset(data->to_free, 0, size);
 	data->philosopher_count = numeric_args[NUMBER_OF_PHILOSOPHERS];
+	*philosophers = data->to_free;
 	return (0);
 }
 
@@ -72,9 +73,8 @@ static int	ft_init(t_data *data)
 	int				i;
 	t_philosopher	*philosophers;
 
-	if (ft_malloc(data))
+	if (ft_malloc(&philosophers, data))
 		return (1);
-	philosophers = data->to_free;
 	if (ft_mutex(INIT, &data->master_lock, data) \
 		|| ft_mutex(INIT, &data->death_lock, data))
 		return (1);
