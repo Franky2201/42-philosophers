@@ -6,40 +6,44 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/29 18:26:51 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/03 19:17:37 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
+static int	ft_start_threads(int i, int number_of_philosophers, \
+								t_philosopher *philosophers)
+{
+	while (i < number_of_philosophers)
+	{
+		if (ft_thread(CREATE, &philosophers[i].thread, &philosophers[i]))
+			return (1);
+		i += 2;
+	}
+	return (0);
+}
+
 static int	ft_run(t_data *data)
 {
 	int				i;
-	int				*numeric_args;
+	int				number_of_philosophers;
 	t_philosopher	*philosophers;
 
 	if (gettimeofday(&data->base_timestamp, NULL) != 0)
 		return (ft_exit((char *)__func__, GETTIMEOFDAY, data));
 	philosophers = data->to_free;
-	numeric_args = data->numeric_args;
+	number_of_philosophers = data->philosopher_count;
 	i = 0;
-	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
-	{
-		if (ft_thread(CREATE, &philosophers[i].thread, &philosophers[i]))
-			return (1);
-		i += 2;
-	}
+	if (ft_start_threads(i, number_of_philosophers, philosophers))
+		return (1);
 	if (ft_safe_usleep(data))
 		return (1);
 	i = 1;
-	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
-	{
-		if (ft_thread(CREATE, &philosophers[i].thread, &philosophers[i]))
-			return (1);
-		i += 2;
-	}
+	if (ft_start_threads(i, number_of_philosophers, philosophers))
+		return (1);
 	i = 0;
-	while (i < numeric_args[NUMBER_OF_PHILOSOPHERS])
+	while (i < number_of_philosophers)
 	{
 		if (ft_thread(JOIN, &philosophers[i].thread, data))
 			return (1);
