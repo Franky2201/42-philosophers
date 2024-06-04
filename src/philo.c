@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/06/04 17:59:32 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/04 19:35:46 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,79 +48,6 @@ static int	ft_run(t_data *data)
 		if (ft_thread(JOIN, &philosophers[i].thread, data))
 			return (1);
 		i++;
-	}
-	return (0);
-}
-
-static int	ft_malloc(t_philosopher **philosophers, t_data *data)
-{
-	int				*numeric_args;
-	size_t			size;
-
-	numeric_args = data->numeric_args;
-	size = numeric_args[NUMBER_OF_PHILOSOPHERS] * sizeof(t_philosopher);
-	data->to_free = (t_philosopher *)malloc(size);
-	if (!data->to_free)
-		return (ft_exit((char *)__func__, MALLOC, NULL));
-	memset(data->to_free, 0, size);
-	data->philosopher_count = numeric_args[NUMBER_OF_PHILOSOPHERS];
-	*philosophers = data->to_free;
-	return (0);
-}
-
-static int	ft_init(t_data *data)
-{
-	int				i;
-	t_philosopher	*philosophers;
-
-	if (ft_malloc(&philosophers, data))
-		return (1);
-	if (ft_mutex(INIT, &data->master_lock, data) \
-		|| ft_mutex(INIT, &data->death_lock, data))
-		return (1);
-	i = 0;
-	while (i < data->numeric_args[NUMBER_OF_PHILOSOPHERS])
-	{
-		if (ft_mutex(INIT, &philosophers[i].lock, data))
-			return (1);
-		philosophers[i].data = data;
-		philosophers[i].index = i + 1;
-		i++;
-	}
-	i = 0;
-	while (i + 1 < data->numeric_args[NUMBER_OF_PHILOSOPHERS])
-	{
-		philosophers[i].next_lock = &philosophers[i + 1].lock;
-		i++;
-	}
-	philosophers[i].next_lock = &philosophers[0].lock;
-	return (0);
-}
-
-static int	ft_check_args(int ac, char **av, int *numeric_args)
-{
-	bool	offset;
-	char	*copy;
-	int		num;
-	int		result;
-
-	if (ac != 5 && ac != 6)
-		return (ft_exit((char *)__func__, USAGE, NULL));
-	numeric_args[4] = -1;
-	while (--ac > 0)
-	{
-		num = ft_atoi(av[ac]);
-		copy = ft_itoa(num);
-		if (!copy)
-			return (ft_exit((char *)__func__, MALLOC, NULL));
-		offset = false;
-		if (av[ac][0] == '+' || av[ac][0] == '-')
-			offset = true;
-		result = ft_strcmp(av[ac] + offset, copy);
-		free(copy);
-		if (result != 0 || num == 0)
-			return (ft_exit((char *)__func__, INVALID_ARGS, NULL));
-		numeric_args[ac - 1] = num;
 	}
 	return (0);
 }

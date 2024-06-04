@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/06/04 17:34:54 by gde-win          ###   ########.fr        #
+#    Updated: 2024/06/04 19:36:26 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,13 +18,15 @@ TSAN_FLAGS :=	-fsanitize=thread -g
 INC_FILES :=	-I/inc
 FUNCTIONS :=	atoi.c \
 				check_args.c \
+				init.c \
 				itoa.c \
 				live.c \
+				live_utils.c \
 				philo.c \
 				safe_mutexes.c \
 				safe_threads.c \
 				strcmp.c \
-				utils.c
+				philo_utils.c
 SRCS_DIR :=		src
 SRCS :=			$(addprefix $(SRCS_DIR)/, $(FUNCTIONS))
 OBJS_DIR :=		obj

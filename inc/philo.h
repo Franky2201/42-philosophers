@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/06/04 17:45:07 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/04 19:40:49 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,21 @@ typedef struct s_data
 
 /* FUNCTIONS */
 int		ft_atoi(const char *str);
+int		ft_check_args(int ac, char **av, int *numeric_args);
+int		ft_die(t_philosopher *philosophers, t_data *data, bool *flag);
 int		ft_eat(t_philosopher *philosopher, t_data *data);
 int		ft_exit(char *caller_name, char *error_message, t_data *data);
 int		ft_free(t_data *data);
 int		ft_gettime(int *timestamp, t_data *data);
 int		ft_has_anyone_died(t_data *data);
 void	*ft_healthcheck(void *ptr);
+int		ft_init(t_data *data);
 char	*ft_itoa(int n);
+int		ft_lone_philosopher(pthread_mutex_t *lock, t_data *data);
 int		ft_meal_limit_reached(t_philosopher *philosopher);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
+int		ft_print_event(char *event, int *timestamp, \
+						size_t philosopher, t_data *data);
 void	*ft_routine(void *ptr);
 int		ft_safe_usleep(t_data *data);
 int		ft_sleep(t_philosopher *philosopher, t_data *data);

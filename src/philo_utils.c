@@ -1,46 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 00:12:09 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/30 19:25:17 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/04 19:37:03 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-int	ft_meal_limit_reached(t_philosopher *philosopher)
-{
-	bool	result;
-	int		meals;
-	t_data	*data;
-
-	data = philosopher->data;
-	meals = data->numeric_args[NUMBER_OF_MEALS];
-	if (ft_mutex(LOCK, &data->master_lock, data))
-		return (1);
-	result = false;
-	if (philosopher->meal_count == meals)
-		result = true;
-	if (ft_mutex(UNLOCK, &data->master_lock, data))
-		return (1);
-	return (result);
-}
-
-int	ft_has_anyone_died(t_data *data)
-{
-	bool	result;
-
-	if (ft_mutex(LOCK, &data->death_lock, data))
-		return (1);
-	result = data->death;
-	if (ft_mutex(UNLOCK, &data->death_lock, data))
-		return (1);
-	return (result);
-}
 
 void	*ft_routine(void *ptr)
 {
