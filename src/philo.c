@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:42:34 by gde-win           #+#    #+#             */
-/*   Updated: 2024/06/03 19:20:55 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/04 17:59:32 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,8 @@ static int	ft_check_args(int ac, char **av, int *numeric_args)
 
 int	main(int ac, char **av)
 {
-	/*LIBFT NOT AUTHORIZED*/
-	pthread_t		health_thread;
-	t_data			data;
+	pthread_t	health_thread;
+	t_data		data;
 
 	memset(&data, 0, sizeof(t_data));
 	if (ft_check_args(ac, av, data.numeric_args))

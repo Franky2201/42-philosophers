@@ -6,7 +6,7 @@
 #    By: gde-win <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/10 17:42:57 by gde-win           #+#    #+#              #
-#    Updated: 2024/05/30 19:17:58 by gde-win          ###   ########.fr        #
+#    Updated: 2024/06/04 17:34:54 by gde-win          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,15 @@ CFLAGS :=		-Wall -Wextra -Werror -O3
 ASAN_FLAGS :=	-fsanitize=address -g
 TSAN_FLAGS :=	-fsanitize=thread -g
 INC_FILES :=	-I/inc
-FUNCTIONS :=	live.c \
+FUNCTIONS :=	atoi.c \
+				check_args.c \
+				itoa.c \
+				live.c \
 				philo.c \
 				safe_mutexes.c \
 				safe_threads.c \
+				strcmp.c \
 				utils.c
-LIBFT :=		libft
-LLIBFT :=		$(addsuffix /libft.a, $(LIBFT))
 SRCS_DIR :=		src
 SRCS :=			$(addprefix $(SRCS_DIR)/, $(FUNCTIONS))
 OBJS_DIR :=		obj
@@ -32,10 +34,7 @@ RED :=			\033[0;31m
 NO_COLOR :=		\033[0m
 MAKE :=			make
 
-all: $(LIBFT) $(OBJS_DIR) $(NAME)
-
-$(LIBFT):
-		@$(MAKE) -C $@
+all: $(OBJS_DIR) $(NAME)
 
 $(OBJS_DIR):
 		@mkdir -p $@
@@ -43,7 +42,7 @@ $(OBJS_DIR):
 		@echo -n \[
 
 $(NAME): $(OBJS)
-		@$(CC) $(CFLAGS) $^ -Wl,$(LLIBFT) -pthread -o $@
+		@$(CC) $(CFLAGS) $^ -pthread -o $@
 		@echo "]$(NO_COLOR)"
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
@@ -65,7 +64,6 @@ else
 		@echo "$(RED)Removing philo objects$(END_COLOR)"
 		@rm -rf $(OBJS_DIR)
 endif
-		@make clean -C $(LIBFT)
 
 fclean: clean
 ifeq ($(wildcard $(NAME)),)
@@ -73,7 +71,6 @@ else
 		@echo "$(RED)Removing philo executable$(END_COLOR)"
 		@rm -rf $(NAME)
 endif
-		@make fclean -C $(LIBFT)
 
 re: fclean all
 

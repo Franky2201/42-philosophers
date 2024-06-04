@@ -6,7 +6,7 @@
 /*   By: gde-win <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 22:41:35 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/29 18:31:13 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/04 17:45:07 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 # define PHILO_H
 
 /* LIBRARIES */
-# include "../libft/inc/libft.h"
+# include <limits.h>
 # include <pthread.h>
+# include <stdbool.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
+# include <unistd.h>
 
 /* COLORS */
 # define BOLD_BLUE "\033[1;34m"
@@ -100,16 +103,19 @@ typedef struct s_data
 }	t_data;
 
 /* FUNCTIONS */
+int		ft_atoi(const char *str);
 int		ft_eat(t_philosopher *philosopher, t_data *data);
 int		ft_exit(char *caller_name, char *error_message, t_data *data);
 int		ft_free(t_data *data);
 int		ft_gettime(int *timestamp, t_data *data);
 int		ft_has_anyone_died(t_data *data);
 void	*ft_healthcheck(void *ptr);
+char	*ft_itoa(int n);
 int		ft_meal_limit_reached(t_philosopher *philosopher);
 int		ft_mutex(t_mutex_actions action, pthread_mutex_t *lock, t_data *data);
 void	*ft_routine(void *ptr);
 int		ft_safe_usleep(t_data *data);
 int		ft_sleep(t_philosopher *philosopher, t_data *data);
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_thread(t_thread_actions action, pthread_t *thread, void *ptr);
 #endif

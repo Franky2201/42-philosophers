@@ -6,7 +6,7 @@
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:45:27 by gde-win           #+#    #+#             */
-/*   Updated: 2024/05/30 19:44:51 by gde-win          ###   ########.fr       */
+/*   Updated: 2024/06/04 18:43:15 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,37 @@ static int	ft_print_event(char *event, int *timestamp, \
 	return (0);
 }
 
+static int	ft_has_passed(int elapsed, size_t i, t_data *data)
+{
+	int		time_to_die;
+
+	time_to_die = data->numeric_args[TIME_TO_DIE];
+	if (elapsed >= time_to_die)
+	{
+		/*if (ft_mutex(LOCK, &data->master_lock, data))
+			return (1);*/
+		if (ft_mutex(LOCK, &data->death_lock, data))
+			return (1);
+		if (ft_gettime(&elapsed, data))
+			return (1);
+		if (printf("%i\t%zu\t%s\n", elapsed, i + 1, DIE) < 0)
+			return (ft_exit((char *)__func__, PRINTF, data));
+		data->death = true;
+		if (ft_mutex(UNLOCK, &data->death_lock, data))
+			return (1);
+		/*if (ft_mutex(UNLOCK, &data->master_lock, data))
+			return (1);*/
+		return (0);
+	}
+	return (2);
+}
+
 static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 {
 	int		elapsed;
-	int		time_to_die;
+	int		result;
 	size_t	i;
 
-	time_to_die = data->numeric_args[TIME_TO_DIE];
 	i = 0;
 	while (i < data->philosopher_count)
 	{
@@ -44,21 +68,9 @@ static int	ft_die(t_philosopher *philosophers, t_data *data, bool *flag)
 			elapsed -= philosophers[i].last_meal;
 			if (ft_mutex(UNLOCK, &data->master_lock, data))
 				return (1);
-			if (elapsed >= time_to_die)
-			{
-				/*if (ft_mutex(LOCK, &data->master_lock, data))
-					return (1);*/
-				if (ft_print_event(DIE, &elapsed, i + 1, data))
-					return (1);
-				if (ft_mutex(LOCK, &data->death_lock, data))
-					return (1);
-				data->death = true;
-				if (ft_mutex(UNLOCK, &data->death_lock, data))
-					return (1);
-				/*if (ft_mutex(UNLOCK, &data->master_lock, data))
-					return (1);*/
-				return (0);
-			}
+			result = ft_has_passed(elapsed, i, data);
+			if (result != 2)
+				return (result);
 		}
 		i++;
 	}

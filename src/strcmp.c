@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   strcmp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gde-win <gde-win@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 15:49:24 by gde-win           #+#    #+#             */
-/*   Updated: 2024/04/10 19:28:49 by gde-win          ###   ########.fr       */
+/*   Created: 2024/06/04 16:42:02 by gde-win           #+#    #+#             */
+/*   Updated: 2024/06/04 16:42:49 by gde-win          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "../inc/philo.h"
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	c;
+	size_t	i;
 
-	if (fd < 0)
-		return ;
-	if (n <= -10 || n >= 10)
-		ft_putnbr_fd(n / 10, fd);
-	else if (n < 0)
+	if (!s1 || !s2)
+		return (0);
+	i = 0;
+	while (s1[i] || s2[i])
 	{
-		write(fd, "-", 1);
-		n *= -1;
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
-	n %= 10;
-	n *= (n >= 0) - (n < 0);
-	c = n + '0';
-	write (fd, &c, 1);
+	return (0);
 }
