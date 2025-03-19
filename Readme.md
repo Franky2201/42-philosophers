@@ -20,7 +20,7 @@ Philosophers is a multithreading project written in C that simulates the famous 
 ## Installation & Usage
 ### Compilation
 ```sh
-make -C philo        # For the thread-based version
+make -C philo
 ```
 
 ### Running the Simulation
